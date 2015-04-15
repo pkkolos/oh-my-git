@@ -45,8 +45,7 @@ _omg_build_prompt() {
         local current_branch=$(\git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if [[ $current_branch == 'HEAD' ]]; then local detached=true; fi
 
-        local number_of_logs="$(\git log --pretty=oneline -n1 2>/dev/null | wc -l)"
-        if [[ $number_of_logs -eq 0 ]]; then
+        if [[ -z "$(\git log --pretty=oneline -n1 2>/dev/null)" ]]; then
             local just_init=true
         else
             local upstream=$(\git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2>/dev/null)
@@ -55,6 +54,7 @@ _omg_build_prompt() {
             local git_status="$(\git status --porcelain 2>/dev/null)"
             local action="$(_omg_get_current_action)"
 
+            if [[ $git_status =~ ($'\n'|^)\\? ]]; then local has_untracked_files=true; fi
             if [[ $git_status =~ ($'\n'|^).M ]]; then local has_modifications=true; fi
             if [[ $git_status =~ ($'\n'|^)M ]]; then local has_modifications_cached=true; fi
             if [[ $git_status =~ ($'\n'|^)A ]]; then local has_adds=true; fi
@@ -62,8 +62,6 @@ _omg_build_prompt() {
             if [[ $git_status =~ ($'\n'|^)D ]]; then local has_deletions_cached=true; fi
             if [[ $git_status =~ ($'\n'|^)[MAD] && ! $git_status =~ ($'\n'|^).[MAD\?] ]]; then local ready_to_commit=true; fi
 
-            local number_of_untracked_files=$(\grep -c "^??" <<< "${git_status}")
-            if [[ $number_of_untracked_files -gt 0 ]]; then local has_untracked_files=true; fi
             local tag_at_current_commit=$(\git describe --exact-match --tags $current_commit_hash 2>/dev/null)
             if [[ -n $tag_at_current_commit ]]; then local is_on_a_tag=true; fi
 
@@ -78,8 +76,7 @@ _omg_build_prompt() {
 
             local will_rebase=$(\git config --get branch.${current_branch}.rebase 2>/dev/null)
 
-            local number_of_stashes="$(\git stash list -n1 2>/dev/null | wc -l)"
-            if [[ $number_of_stashes -gt 0 ]]; then local has_stashes=true; fi
+            if [[ -n "$(\git stash list -n1 2>/dev/null)" ]]; then local has_stashes=true; fi
         fi
     fi
 
