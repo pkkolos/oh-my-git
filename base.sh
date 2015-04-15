@@ -32,7 +32,7 @@ _omg_get_current_action() {
 _omg_build_prompt() {
     local enabled=$(\git config --local --get oh-my-git.enabled)
     if [[ $enabled == false ]]; then
-        exit
+        return 1
     fi
 
     local prompt=""
