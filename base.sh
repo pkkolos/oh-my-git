@@ -75,6 +75,9 @@ _omg_build_prompt() {
             if [[ $has_diverged == false && $commits_ahead -gt 0 ]]; then local should_push=true; fi
 
             local will_rebase=$(\git config --get branch.${current_branch}.rebase 2>/dev/null)
+            if [[ -z "$will_rebase" ]]; then
+                will_rebase=$(\git config --get pull.rebase 2>/dev/null)
+            fi
 
             if [[ -n "$(\git stash list -n1 2>/dev/null)" ]]; then local has_stashes=true; fi
         fi
