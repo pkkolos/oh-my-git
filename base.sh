@@ -54,13 +54,13 @@ _omg_build_prompt() {
             local git_status="$(\git status --porcelain 2>/dev/null)"
             local action="$(_omg_get_current_action)"
 
-            if [[ $git_status =~ ($'\n'|^)\\? ]]; then local has_untracked_files=true; fi
+            if [[ $git_status =~ ($'\n'|^)[?] ]]; then local has_untracked_files=true; fi
             if [[ $git_status =~ ($'\n'|^).M ]]; then local has_modifications=true; fi
             if [[ $git_status =~ ($'\n'|^)M ]]; then local has_modifications_cached=true; fi
             if [[ $git_status =~ ($'\n'|^)A ]]; then local has_adds=true; fi
             if [[ $git_status =~ ($'\n'|^).D ]]; then local has_deletions=true; fi
             if [[ $git_status =~ ($'\n'|^)D ]]; then local has_deletions_cached=true; fi
-            if [[ $git_status =~ ($'\n'|^)[MAD] && ! $git_status =~ ($'\n'|^).[MAD\?] ]]; then local ready_to_commit=true; fi
+            if [[ $git_status =~ ($'\n'|^)[MAD] && ! $git_status =~ ($'\n'|^).[MAD?] ]]; then local ready_to_commit=true; fi
 
             local tag_at_current_commit=$(\git describe --exact-match --tags $current_commit_hash 2>/dev/null)
             if [[ -n $tag_at_current_commit ]]; then local is_on_a_tag=true; fi
