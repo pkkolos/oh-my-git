@@ -45,7 +45,7 @@ _omg_build_prompt() {
         local current_branch=$(\git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if [[ $current_branch == 'HEAD' ]]; then local detached=true; fi
 
-        if [[ -z "$(\git log --pretty=oneline -n1 2>/dev/null)" ]]; then
+        if [[ -z "$(\git rev-list -n1 HEAD 2>/dev/null)" ]]; then
             local just_init=true
         else
             local upstream=$(\git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2>/dev/null)
@@ -66,7 +66,7 @@ _omg_build_prompt() {
             if [[ -n $tag_at_current_commit ]]; then local is_on_a_tag=true; fi
 
             if [[ $has_upstream == true ]]; then
-                local commits_diff="$(\git log --pretty=oneline --topo-order --left-right ${current_commit_hash}...${upstream} 2>/dev/null)"
+                local commits_diff="$(\git rev-list --left-right ${current_commit_hash}...${upstream} 2>/dev/null)"
                 local commits_ahead=$(\grep -c "^<" <<< "$commits_diff")
                 local commits_behind=$(\grep -c "^>" <<< "$commits_diff")
             fi
@@ -79,7 +79,7 @@ _omg_build_prompt() {
                 will_rebase=$(\git config --get pull.rebase 2>/dev/null)
             fi
 
-            if [[ -n "$(\git stash list -n1 2>/dev/null)" ]]; then local has_stashes=true; fi
+            if [[ -n "$(\git rev-parse refs/stash -- 2>/dev/null)" ]]; then local has_stashes=true; fi
         fi
     fi
 
