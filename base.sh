@@ -79,7 +79,7 @@ _omg_build_prompt() {
                 will_rebase=$(\git config --get pull.rebase 2>/dev/null)
             fi
 
-            if [[ -n "$(\git rev-parse refs/stash -- 2>/dev/null)" ]]; then local has_stashes=true; fi
+            if \git rev-parse --verify -q refs/stash >/dev/null; then local has_stashes=true; fi
         fi
     fi
 
