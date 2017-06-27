@@ -37,7 +37,7 @@ _omg_build_prompt() {
     if [[ -n $current_commit_hash ]]; then local is_a_git_repo=true; fi
 
     if [[ $is_a_git_repo == true ]]; then
-        local enabled=$(\git config --local --get oh-my-git.enabled)
+        local enabled=$(\git config --get oh-my-git.enabled)
         if [[ $enabled == false ]]; then
             return 1
         fi
