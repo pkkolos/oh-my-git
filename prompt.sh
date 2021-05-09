@@ -106,7 +106,7 @@ _omg_custom_build_prompt()
         prompt+=$(_omg_append_sr "$action" "${OMG_COLOR_ACTION}${OMG_MARK_ACTION} ${action}${NO_COL}")
 
         if [[ -n $prompt ]]; then
-            prompt+=$(_lp_sr "|")
+            prompt+="| "
         fi
 
         if [[ $detached == true ]]; then
@@ -124,22 +124,22 @@ _omg_custom_build_prompt()
                 fi
 
                 if [[ $has_diverged == true ]]; then
-                    prompt+=$(_lp_sr "${OMG_COLOR_COMMITS}-${commits_behind}${NO_COL}")
-                    prompt+=$(_lp_sr "${OMG_COLOR_DIVERGED}${OMG_MARK_DIVERGED}${NO_COL}")
-                    prompt+=$(_lp_sr "${OMG_COLOR_COMMITS}+${commits_ahead}${NO_COL}")
+                    prompt+="${OMG_COLOR_COMMITS}-${commits_behind}${NO_COL} "
+                    prompt+="${OMG_COLOR_DIVERGED}${OMG_MARK_DIVERGED}${NO_COL} "
+                    prompt+="${OMG_COLOR_COMMITS}+${commits_ahead}${NO_COL} "
                 else
                     if [[ $commits_behind -gt 0 ]]; then
-                        prompt+=$(_lp_sr "${OMG_COLOR_COMMITS}-${commits_behind}${NO_COL}")
-                        prompt+=$(_lp_sr "${OMG_COLOR_FAST_FORWARD}${OMG_MARK_FAST_FORWARD}${NO_COL}")
+                        prompt+="${OMG_COLOR_COMMITS}-${commits_behind}${NO_COL} "
+                        prompt+="${OMG_COLOR_FAST_FORWARD}${OMG_MARK_FAST_FORWARD}${NO_COL} "
                     fi
                     if [[ $commits_ahead -gt 0 ]]; then
-                        prompt+=$(_lp_sr "${OMG_COLOR_PUSH}${OMG_MARK_PUSH}${NO_COL}")
-                        prompt+=$(_lp_sr "${OMG_COLOR_COMMITS}+${commits_ahead}${NO_COL}")
+                        prompt+="${OMG_COLOR_PUSH}${OMG_MARK_PUSH}${NO_COL} "
+                        prompt+="${OMG_COLOR_COMMITS}+${commits_ahead}${NO_COL} "
                     fi
                 fi
                 prompt+="("
-                prompt+=$(_lp_sr "${OMG_COLOR_LOCAL}${current_branch}${NO_COL}")
-                prompt+=$(_lp_sr "${type_of_upstream}")
+                prompt+="${OMG_COLOR_LOCAL}${current_branch}${NO_COL} "
+                prompt+="${type_of_upstream} "
                 prompt+="${OMG_COLOR_UPSTREAM}${upstream//\/$current_branch/}${NO_COL}"
                 prompt+=")"
             fi
