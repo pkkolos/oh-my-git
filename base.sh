@@ -33,12 +33,12 @@ _omg_build_prompt() {
     local prompt=""
 
     # Git info
-    local current_commit_hash=$(\git rev-parse HEAD 2>/dev/null)
+    local current_commit_hash=$(\git rev-parse --short HEAD 2>/dev/null)
     if [[ -n $current_commit_hash ]]; then local is_a_git_repo=true; fi
 
     if [[ $is_a_git_repo == true ]]; then
         local enabled=$(\git config --get oh-my-git.enabled)
-        if [[ $enabled == false ]]; then
+        if [[ ${enabled} == false ]]; then
             return 1
         fi
 
@@ -66,9 +66,8 @@ _omg_build_prompt() {
             if [[ -n $tag_at_current_commit ]]; then local is_on_a_tag=true; fi
 
             if [[ $has_upstream == true ]]; then
-                local commits_diff="$(\git rev-list --left-right ${current_commit_hash}...${upstream} 2>/dev/null)"
-                local commits_ahead=$(\grep -c "^<" <<< "$commits_diff")
-                local commits_behind=$(\grep -c "^>" <<< "$commits_diff")
+                local commits_ahead commits_behind
+                read -r commits_ahead commits_behind <<<$(\git rev-list --left-right --count ${current_commit_hash}...${upstream} 2>/dev/null)
             fi
 
             if [[ $commits_ahead -gt 0 && $commits_behind -gt 0 ]]; then local has_diverged=true; fi

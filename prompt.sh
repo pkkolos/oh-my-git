@@ -43,8 +43,7 @@ elif [[ -n "$ZSH_VERSION" ]]; then
 fi
 source $DIR/base.sh
 
-_omg_append()
-{
+_omg_append() {
     local flag=$1
     local symbol=$2
     if [[ -z "$flag" || $flag == false ]]; then
@@ -54,18 +53,15 @@ _omg_append()
     fi
 }
 
-_omg_append_sr()
-{
+_omg_append_sr() {
     echo -n "$(_omg_append "$1" "$2 ")"
 }
 
-_omg_append_sl()
-{
+_omg_append_sl() {
     echo -n "$(_omg_append "$1" " $2")"
 }
 
-_omg_custom_build_prompt()
-{
+_omg_custom_build_prompt() {
     local enabled=${1}
     local is_a_git_repo=${2}
     local just_init=${3}
@@ -112,7 +108,7 @@ _omg_custom_build_prompt()
         if [[ $detached == true ]]; then
             prompt+="${OMG_COLOR_DETACHED}(${NO_COL}"
             prompt+="${OMG_COLOR_MARK_DETACHED}${OMG_MARK_DETACHED}${NO_COL}"
-            prompt+="${OMG_COLOR_DETACHED}${current_commit_hash:0:7})${NO_COL}"
+            prompt+="${OMG_COLOR_DETACHED}${current_commit_hash})${NO_COL}"
         else
             if [[ $has_upstream == false ]]; then
                 prompt+="${OMG_COLOR_LOCAL}(${current_branch})${NO_COL}"
